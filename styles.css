@@ -258,7 +258,8 @@ button {
     border-radius: 80px 80px 0 0;
     position: absolute;
     top: -65px;
-    left: 75px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .bag-body {
