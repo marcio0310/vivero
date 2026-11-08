@@ -259,7 +259,8 @@ button {
     position: absolute;
     top: -65px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) rotate(7deg);
+    transform-origin: bottom center;
 }
 
 .bag-body {
