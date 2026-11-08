@@ -65,16 +65,18 @@ button {
     letter-spacing: 2px;
 }
 
-/* =====================================
-   CABEÇALHO
-   ===================================== */
+
+/* =========================================
+   CABEÇALHO — VIVERO
+   ========================================= */
 
 .header {
-    height: 82px;
+    min-height: 82px;
     padding: 0 7%;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 30px;
     background: var(--cream);
     border-bottom: 1px solid rgba(37, 39, 34, 0.15);
     position: sticky;
@@ -82,7 +84,7 @@ button {
     z-index: 100;
 }
 
-/* LOGO VIVERO */
+/* LOGO */
 
 .logo {
     display: flex;
@@ -101,47 +103,76 @@ button {
     object-position: center;
 }
 
+/* NAVEGAÇÃO */
+
 .navigation {
     display: flex;
+    align-items: center;
     gap: 38px;
 }
 
 .navigation a {
+    position: relative;
     font-size: 12px;
-    font-weight: 600;
-    transition: color 0.2s;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: color 0.2s ease;
+}
+
+.navigation a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 0;
+    height: 2px;
+    background: var(--terracotta);
+    transition: width 0.25s ease;
 }
 
 .navigation a:hover {
     color: var(--terracotta);
 }
 
+.navigation a:hover::after {
+    width: 100%;
+}
+
+/* AÇÕES */
+
 .header-actions {
     display: flex;
     align-items: center;
     gap: 15px;
+    flex-shrink: 0;
 }
 
 .cart-button {
-    background: var(--graphite);
+    background: var(--forest);
     color: var(--cream);
-    border: none;
+    border: 1px solid var(--forest);
     padding: 13px 20px;
     font-size: 10px;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 1.2px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
 .cart-button:hover {
     background: var(--terracotta);
+    border-color: var(--terracotta);
 }
 
 .menu-button {
     display: none;
     background: none;
     border: none;
-    font-size: 24px;
+    color: var(--graphite);
+    font-size: 25px;
+    cursor: pointer;
 }
+
 
 /* =====================================
    HERO
@@ -258,9 +289,7 @@ button {
     border-radius: 80px 80px 0 0;
     position: absolute;
     top: -65px;
-    left: 50%;
-    transform: translateX(-50%) rotate(7deg);
-    transform-origin: bottom center;
+    left: 75px;
 }
 
 .bag-body {
@@ -744,19 +773,30 @@ button {
     margin-top: 15px;
 }
 
-/* =====================================
-   RODAPÉ
-   ===================================== */
+
+/* =========================================
+   RODAPÉ — VIVERO
+   ========================================= */
 
 .footer {
     background: var(--graphite);
     color: var(--cream);
-    padding: 55px 8%;
+    padding: 65px 8% 25px;
+}
+
+.footer-main {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 25px;
+    align-items: flex-start;
+    gap: 60px;
+    padding-bottom: 55px;
+}
+
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
 }
 
 .footer .logo img {
@@ -765,11 +805,62 @@ button {
     height: 72px;
 }
 
-.footer p,
-.footer > span {
-    font-size: 9px;
-    letter-spacing: 1px;
+.footer-brand p {
+    color: var(--mustard);
+    font-size: 10px;
+    letter-spacing: 1.5px;
     font-weight: 700;
+}
+
+.footer-brand > span {
+    font-size: 12px;
+    line-height: 1.8;
+    color: rgba(250, 248, 241, 0.65);
+}
+
+.footer-links {
+    display: flex;
+    gap: 85px;
+}
+
+.footer-column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.footer-column h3 {
+    color: var(--terracotta);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    margin-bottom: 5px;
+}
+
+.footer-column a {
+    font-size: 12px;
+    color: rgba(250, 248, 241, 0.75);
+    transition: color 0.2s ease;
+}
+
+.footer-column a:hover {
+    color: var(--mustard);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(250, 248, 241, 0.18);
+    padding-top: 22px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.footer-bottom span {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: rgba(250, 248, 241, 0.55);
 }
 
 /* =====================================
@@ -798,8 +889,9 @@ button {
 }
 
 @media (max-width: 700px) {
-
+    
     .header {
+        min-height: 70px;
         height: 70px;
         padding: 0 5%;
     }
@@ -813,28 +905,24 @@ button {
         gap: 10px;
     }
 
-    .header {
-        min-height: 70px;
-        height: 70px;
-        padding: 0 5%;
+    .navigation {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        padding: 25px 7%;
+        background: var(--cream);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 22px;
+        border-bottom: 2px solid var(--forest);
+        box-shadow: 0 12px 20px rgba(37, 39, 34, 0.08);
     }
 
     .navigation a {
         font-size: 14px;
         padding: 5px 0;
-    }
-
-    .navigation {
-        display: none;
-        position: absolute;
-        top: 70px;
-        left: 0;
-        width: 100%;
-        padding: 25px;
-        background: var(--cream);
-        flex-direction: column;
-        gap: 20px;
-        border-bottom: 1px solid rgba(37,39,34,0.2);
     }
 
     .navigation.open {
@@ -947,9 +1035,24 @@ button {
     }
 
     .footer {
+        padding: 45px 7% 22px;
+    }
+
+    .footer-main {
         flex-direction: column;
-        align-items: flex-start;
-        padding: 45px 7%;
+        gap: 40px;
+        padding-bottom: 35px;
+    }
+
+    .footer-links {
+        width: 100%;
+        justify-content: space-between;
+        gap: 25px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 12px;
     }
 
 }
@@ -986,49 +1089,17 @@ button {
         font-size: 8px;
     }
 
-}
-
-/* =====================================
-   VIVERO — REFINAMENTOS GERAIS
-   ===================================== */
-
-/* Acessibilidade dos elementos */
-
-button:focus-visible,
-a:focus-visible,
-input:focus-visible {
-    outline: 3px solid var(--mustard);
-    outline-offset: 4px;
-}
-
-/* Transição dos produtos */
-
-.product-card {
-    transition: transform 0.25s ease;
-}
-
-.product-card:hover {
-    transform: translateY(-4px);
-}
-
-/* Proteção contra imagens maiores que o espaço */
-
-img {
-    max-width: 100%;
-}
-
-/* Respeita usuários que preferem menos animações */
-
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        scroll-behavior: auto !important;
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
+    .footer-links {
+        gap: 18px;
     }
+
+    .footer-column a {
+        font-size: 11px;
+    }
+
 }
+
+
 
 
 
