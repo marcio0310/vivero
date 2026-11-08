@@ -1,750 +1,1391 @@
+/* =====================================
+   VIVERO — IDENTIDADE VISUAL
+   ===================================== */
+
+:root {
+    --forest: #344D3B;
+    --olive: #858B52;
+    --terracotta: #C66B4E;
+    --mustard: #D9A441;
+    --sand: #F1EBDD;
+    --cream: #FAF8F1;
+    --graphite: #252722;
+    --white: #FFFFFF;
+
+    --font-main: 'DM Sans', sans-serif;
+    --font-display: 'Space Grotesk', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--cream);
+    color: var(--graphite);
+    font-family: var(--font-main);
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* =====================================
+   BARRA SUPERIOR
+   ===================================== */
+
+.announcement {
+    background: var(--forest);
+    color: var(--cream);
+    text-align: center;
+    padding: 11px 15px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
 
 /* =========================================
-   VIVERO — FUNCIONALIDADES DO SITE
+   CABEÇALHO — VIVERO
    ========================================= */
 
-/* -----------------------------------------
-   1. PRODUTOS
-   ----------------------------------------- */
+.header {
+    min-height: 82px;
+    padding: 0 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    background: var(--cream);
+    border-bottom: 1px solid rgba(37, 39, 34, 0.15);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
 
-// Produtos demonstrativos.
-// Os nomes e preços poderão ser alterados
-// quando definirmos o catálogo definitivo.
+/* LOGO */
 
-const products = [
-    {
-        id: 1,
-        name: "Bolsa Horizonte",
-        category: "bolsas",
-        categoryLabel: "BOLSA",
-        price: 149.90,
-        color: "#858B52",
-        visual: "bag"
-    },
-    {
-        id: 2,
-        name: "Bolsa Travessia",
-        category: "bolsas",
-        categoryLabel: "BOLSA",
-        price: 129.90,
-        color: "#C66B4E",
-        visual: "bag"
-    },
-    {
-        id: 3,
-        name: "Organizador Rota",
-        category: "organizadores",
-        categoryLabel: "ORGANIZADOR",
-        price: 69.90,
-        color: "#344D3B",
-        visual: "pouch"
-    },
-    {
-        id: 4,
-        name: "Nécessaire Campo",
-        category: "organizadores",
-        categoryLabel: "NÉCESSAIRE",
-        price: 59.90,
-        color: "#D9A441",
-        visual: "pouch"
-    }
-];
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    flex-shrink: 0;
+    line-height: 0;
+}
 
+.logo img {
+    display: block;
+    width: 170px;
+    height: 81px;
+    object-fit: contain;
+    object-position: center;
+}
 
-/* -----------------------------------------
-   2. ELEMENTOS DO HTML
-   ----------------------------------------- */
+/* NAVEGAÇÃO */
 
-const productGrid = document.getElementById("product-grid");
-const searchInput = document.getElementById("product-search");
-const filterButtons = document.querySelectorAll(".filter-button");
+.navigation {
+    display: flex;
+    align-items: center;
+    gap: 38px;
+}
 
-const cartOverlay = document.getElementById("cart-overlay");
-const openCartButton = document.getElementById("open-cart");
-const closeCartButton = document.getElementById("close-cart");
+.navigation a {
+    position: relative;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: color 0.2s ease;
+}
 
-const cartItemsContainer = document.getElementById("cart-items");
-const cartCountElement = document.getElementById("cart-count");
-const cartTotalElement = document.getElementById("cart-total");
+.navigation a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 0;
+    height: 2px;
+    background: var(--terracotta);
+    transition: width 0.25s ease;
+}
 
-const checkoutButton = document.getElementById("checkout-button");
+.navigation a:hover {
+    color: var(--terracotta);
+}
 
-const menuButton = document.getElementById("menu-button");
-const navigation = document.querySelector(".navigation");
+.navigation a:hover::after {
+    width: 100%;
+}
 
-const newsletterForm = document.getElementById("newsletter-form");
-const newsletterMessage = document.getElementById("newsletter-message");
+/* AÇÕES */
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-shrink: 0;
+}
 
-/* -----------------------------------------
-   3. CONFIGURAÇÕES
-   ----------------------------------------- */
+.cart-button {
+    background: var(--forest);
+    color: var(--cream);
+    border: 1px solid var(--forest);
+    padding: 13px 20px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
 
-const STORAGE_KEY = "vivero-cart";
+.cart-button:hover {
+    background: var(--terracotta);
+    border-color: var(--terracotta);
+}
 
-let activeFilter = "todos";
-let searchTerm = "";
-let cart = loadCart();
-
-
-function formatPrice(value) {
-    return value.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL"
-    });
+.menu-button {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--graphite);
+    font-size: 25px;
+    cursor: pointer;
 }
 
 
-// Evita problemas ao recuperar dados do navegador.
-function loadCart() {
-    try {
-        const savedCart = JSON.parse(
-            localStorage.getItem(STORAGE_KEY)
-        );
+/* =====================================
+   HERO
+   ===================================== */
 
-        if (!Array.isArray(savedCart)) {
-            return [];
-        }
+.hero {
+    min-height: 650px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--sand);
+    overflow: hidden;
+}
 
-        const validatedCart = [];
+.hero-content {
+    padding: 100px 12% 55px 14%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
 
-        savedCart.forEach(item => {
-            const product = products.find(
-                product => product.id === Number(item.id)
-            );
+.eyebrow {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--terracotta);
+}
 
-            const quantity = Number(item.quantity);
+.hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(55px, 7vw, 100px);
+    line-height: 0.91;
+    letter-spacing: -7px;
+    margin: 28px 0;
+    font-weight: 700;
+}
 
-            if (
-                product &&
-                Number.isInteger(quantity) &&
-                quantity > 0
-            ) {
-                const existing = validatedCart.find(
-                    entry => entry.id === product.id
-                );
+.hero h1 span {
+    color: var(--forest);
+}
 
-                if (existing) {
-                    existing.quantity += quantity;
-                } else {
-                    validatedCart.push({
-                        id: product.id,
-                        quantity
-                    });
-                }
-            }
-        });
+.hero-content > p {
+    max-width: 390px;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #65645B;
+    margin-bottom: 32px;
+}
 
-        return validatedCart;
+.primary-button {
+    display: inline-block;
+    background: var(--terracotta);
+    color: white;
+    padding: 18px 25px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    transition: 0.25s;
+}
 
-    } catch (error) {
-        console.warn(
-            "Não foi possível recuperar a sacola:",
-            error
-        );
+.primary-button:hover {
+    background: var(--forest);
+    transform: translateY(-3px);
+}
 
-        return [];
+.hero-footer {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-top: 75px;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #77766D;
+}
+
+/* =====================================
+   ILUSTRAÇÃO DA BOLSA
+   ===================================== */
+
+.hero-art {
+    position: relative;
+    background: var(--olive);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 550px;
+    overflow: hidden;
+}
+
+.art-circle {
+    width: 430px;
+    height: 430px;
+    border-radius: 50%;
+    background: var(--mustard);
+    position: absolute;
+    opacity: 0.95;
+}
+
+.bag-illustration {
+    position: relative;
+    z-index: 2;
+    width: 270px;
+    height: 290px;
+    transform: rotate(-7deg);
+    filter: drop-shadow(15px 20px 12px rgba(0,0,0,0.15));
+}
+
+.bag-handle {
+    width: 120px;
+    height: 110px;
+    border: 19px solid var(--forest);
+    border-bottom: none;
+    border-radius: 80px 80px 0 0;
+    position: absolute;
+    top: -65px;
+    left: 50%;
+    transform: translateX(-50%) rotate(7deg);
+    transform-origin: bottom center;
+}
+
+.bag-body {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: var(--terracotta);
+    border: 4px solid var(--graphite);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    clip-path: polygon(5% 0, 95% 0, 100% 100%, 0 100%);
+}
+
+.bag-body span {
+    color: var(--cream);
+    font-family: var(--font-display);
+    font-size: 95px;
+    font-weight: 700;
+}
+
+.art-label {
+    position: absolute;
+    z-index: 3;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.label-top {
+    top: 40px;
+    left: 40px;
+}
+
+.label-bottom {
+    bottom: 40px;
+    right: 35px;
+}
+
+.art-number {
+    position: absolute;
+    bottom: -50px;
+    left: 20px;
+    font-family: var(--font-display);
+    font-size: 180px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.12);
+}
+
+/* =====================================
+   FAIXA DE DESTAQUE
+   ===================================== */
+
+.ticker {
+    background: var(--mustard);
+    overflow: hidden;
+    padding: 18px 0;
+    white-space: nowrap;
+}
+
+.ticker div {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    animation: ticker 25s linear infinite;
+}
+
+@keyframes ticker {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-30%);
     }
 }
 
+/* =====================================
+   PRODUTOS
+   ===================================== */
 
-function saveCart() {
-    try {
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(cart)
-        );
-    } catch (error) {
-        console.warn(
-            "Não foi possível salvar a sacola:",
-            error
-        );
-    }
+.products-section {
+    padding: 110px 8%;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 55px;
+}
+
+.section-heading h2,
+.about-content h2,
+.newsletter h2 {
+    font-family: var(--font-display);
+    font-size: clamp(42px, 5vw, 68px);
+    line-height: 0.95;
+    letter-spacing: -4px;
+    margin-top: 20px;
+}
+
+.section-heading > p {
+    max-width: 300px;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #77766D;
+    margin-bottom: 5px;
+}
+
+.product-filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-bottom: 25px;
+    border-bottom: 1px solid rgba(37,39,34,0.2);
+}
+
+.filter-button {
+    border: 1px solid var(--graphite);
+    background: transparent;
+    padding: 12px 19px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    transition: 0.2s;
+}
+
+.filter-button.active,
+.filter-button:hover {
+    background: var(--forest);
+    color: white;
+    border-color: var(--forest);
+}
+
+#product-search {
+    margin-left: auto;
+    padding: 12px 15px;
+    border: 1px solid rgba(37,39,34,0.3);
+    background: transparent;
+    outline: none;
+    min-width: 220px;
+    font-size: 12px;
+}
+
+#product-search:focus {
+    border-color: var(--terracotta);
+}
+
+/* =====================================
+   GRADE DE PRODUTOS
+   ===================================== */
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+    padding-top: 35px;
+}
+
+.product-card {
+    min-width: 0;
+}
+
+.product-image {
+    height: 310px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.product-image::after {
+    content: "VIVERO";
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    opacity: 0.5;
+}
+
+.product-image .product-shape {
+    width: 65%;
+    height: 65%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 65px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.8);
+    transform: rotate(-5deg);
+    transition: transform 0.4s;
+}
+
+.product-card:hover .product-shape {
+    transform: rotate(0deg) scale(1.08);
+}
+
+.product-info {
+    padding: 17px 2px;
+}
+
+.product-info h3 {
+    font-family: var(--font-display);
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.product-category {
+    color: #88867C;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.product-price {
+    font-size: 14px;
+    font-weight: 800;
+    margin-top: 12px;
+}
+
+.add-to-cart {
+    width: 100%;
+    margin-top: 15px;
+    padding: 14px;
+    background: var(--forest);
+    border: none;
+    color: white;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    transition: 0.2s;
+}
+
+.add-to-cart:hover {
+    background: var(--terracotta);
+}
+
+.no-products {
+    grid-column: 1 / -1;
+    padding: 40px 0;
+    color: #77766D;
+}
+
+/* =====================================
+   SOBRE A VIVERO
+   ===================================== */
+
+.about-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 600px;
+    background: var(--forest);
+    color: var(--cream);
+}
+
+.about-image {
+    position: relative;
+    background: var(--terracotta);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.about-image > span {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.about-shape {
+    width: 300px;
+    height: 300px;
+    background: var(--mustard);
+    border-radius: 48% 52% 60% 40%;
+    transform: rotate(30deg);
+    border: 3px solid var(--graphite);
+}
+
+.about-content {
+    padding: 100px 13%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.about-content .eyebrow {
+    color: var(--mustard);
+}
+
+.about-content h2 span {
+    color: var(--mustard);
+}
+
+.about-content p {
+    font-size: 13px;
+    line-height: 1.9;
+    color: rgba(255,255,255,0.75);
+    margin: 30px 0;
+    max-width: 400px;
+}
+
+.text-link {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--mustard);
+    padding-bottom: 8px;
+}
+
+/* =====================================
+   NEWSLETTER
+   ===================================== */
+
+.newsletter {
+    background: var(--sand);
+    text-align: center;
+    padding: 110px 20px;
+}
+
+.newsletter h2 {
+    font-size: clamp(40px, 5vw, 65px);
+}
+
+.newsletter > p {
+    font-size: 13px;
+    color: #77766D;
+    margin-top: 20px;
+}
+
+.newsletter form {
+    display: flex;
+    max-width: 470px;
+    margin: 35px auto 0;
+    border-bottom: 2px solid var(--graphite);
+}
+
+.newsletter input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    outline: none;
+    padding: 15px 5px;
+    font-size: 12px;
+}
+
+.newsletter button {
+    border: none;
+    background: transparent;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 15px;
+}
+
+#newsletter-message {
+    min-height: 20px;
+    font-size: 12px;
+}
+
+/* =====================================
+   SACOLA
+   ===================================== */
+
+.cart-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0,0,0,0.45);
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+}
+
+.cart-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cart-panel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: min(430px, 100%);
+    background: var(--cream);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: 0.3s;
+}
+
+.cart-overlay.open .cart-panel {
+    transform: translateX(0);
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 25px;
+    border-bottom: 1px solid rgba(37,39,34,0.2);
+}
+
+.cart-header h2 {
+    font-family: var(--font-display);
+    font-size: 22px;
+}
+
+.cart-header button {
+    background: none;
+    border: none;
+    font-size: 22px;
+}
+
+.cart-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 0;
+}
+
+.empty-cart {
+    color: #77766D;
+    font-size: 13px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(37,39,34,0.15);
+    font-size: 13px;
+}
+
+.cart-item button {
+    border: none;
+    background: none;
+    color: var(--terracotta);
+    font-size: 11px;
+}
+
+.cart-footer {
+    border-top: 1px solid rgba(37,39,34,0.2);
+    padding-top: 25px;
+}
+
+.cart-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.checkout-button {
+    width: 100%;
+    background: var(--terracotta);
+    color: white;
+    border: none;
+    padding: 17px;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.cart-footer > p {
+    text-align: center;
+    font-size: 10px;
+    color: #77766D;
+    margin-top: 15px;
 }
 
 
-/* -----------------------------------------
-   4. EXIBIÇÃO DOS PRODUTOS
-   ----------------------------------------- */
+/* =========================================
+   RODAPÉ — VIVERO
+   ========================================= */
 
-function renderProducts() {
+.footer {
+    background: var(--graphite);
+    color: var(--cream);
+    padding: 65px 8% 25px;
+}
 
-    if (!productGrid) return;
+.footer-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 60px;
+    padding-bottom: 55px;
+}
 
-    const filteredProducts = products.filter(product => {
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+}
 
-        const matchesCategory =
-            activeFilter === "todos" ||
-            product.category === activeFilter;
+.footer .logo img {
+    filter: brightness(0) invert(1);
+    width: 150px;
+    height: 72px;
+}
 
-        const matchesSearch =
-            product.name
-                .toLowerCase()
-                .includes(searchTerm);
+.footer-brand p {
+    color: var(--mustard);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+}
 
-        return matchesCategory && matchesSearch;
-    });
+.footer-brand > span {
+    font-size: 12px;
+    line-height: 1.8;
+    color: rgba(250, 248, 241, 0.65);
+}
 
+.footer-links {
+    display: flex;
+    gap: 85px;
+}
 
-    if (filteredProducts.length === 0) {
-        productGrid.innerHTML = `
-            <p class="no-products">
-                Nenhum produto encontrado.
-                Tente outra busca.
-            </p>
-        `;
+.footer-column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+}
 
-        return;
+.footer-column h3 {
+    color: var(--terracotta);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    margin-bottom: 5px;
+}
+
+.footer-column a {
+    font-size: 12px;
+    color: rgba(250, 248, 241, 0.75);
+    transition: color 0.2s ease;
+}
+
+.footer-column a:hover {
+    color: var(--mustard);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(250, 248, 241, 0.18);
+    padding-top: 22px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.footer-bottom span {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: rgba(250, 248, 241, 0.55);
+}
+
+/* =====================================
+   RESPONSIVIDADE
+   ===================================== */
+
+@media (max-width: 1000px) {
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
+    .hero-content {
+        padding-left: 8%;
+        padding-right: 8%;
+    }
 
+    .hero h1 {
+        letter-spacing: -4px;
+    }
+
+    .about-content {
+        padding: 70px 9%;
+    }
+
+}
+
+@media (max-width: 700px) {
     
-    productGrid.innerHTML = filteredProducts.map(product => `
-
-        <article class="product-card">
-
-            <div
-                class="product-image"
-                style="--product-color: ${product.color};"
-            >
-
-                <span class="product-index">
-                    0${product.id}
-                </span>
-
-                <div class="product-visual product-visual--${product.visual}">
-
-                    <span class="product-handle"></span>
-                    <span class="product-body"></span>
-
-                </div>
-
-                <span class="product-image-caption">
-                    VIVERO OBJECTS
-                </span>
-
-            </div>
-
-            <div class="product-info">
-
-                <div class="product-heading">
-
-                    <span class="product-category">
-                        ${product.categoryLabel}
-                    </span>
-
-                    <span class="product-reference">
-                        00${product.id}
-                    </span>
-
-                </div>
-
-                <h3>${product.name}</h3>
-
-                <div class="product-bottom">
-
-                    <p class="product-price">
-                        ${formatPrice(product.price)}
-                    </p>
-
-                    <button
-                        class="add-to-cart"
-                        data-add="${product.id}"
-                    >
-                        ADICIONAR À SACOLA +
-                    </button>
-
-                </div>
-
-            </div>
-
-        </article>
-
-    `).join("");
-}
-
-
-/* -----------------------------------------
-   5. FILTROS DO CATÁLOGO
-   ----------------------------------------- */
-
-filterButtons.forEach(button => {
-
-    button.addEventListener("click", () => {
-
-        activeFilter = button.dataset.filter;
-
-        filterButtons.forEach(item => {
-            item.classList.remove("active");
-        });
-
-        button.classList.add("active");
-
-        renderProducts();
-
-    });
-
-});
-
-
-/* -----------------------------------------
-   6. BUSCA DE PRODUTOS
-   ----------------------------------------- */
-
-if (searchInput) {
-
-    searchInput.addEventListener("input", () => {
-
-        searchTerm = searchInput.value
-            .trim()
-            .toLowerCase();
-
-        renderProducts();
-
-    });
-
-}
-
-
-/* -----------------------------------------
-   7. ADICIONAR À SACOLA
-   ----------------------------------------- */
-
-function addToCart(productId) {
-
-    const product = products.find(
-        item => item.id === productId
-    );
-
-    if (!product) return;
-
-    const existingItem = cart.find(
-        item => item.id === productId
-    );
-
-    if (existingItem) {
-        existingItem.quantity++;
-    } else {
-        cart.push({
-            id: productId,
-            quantity: 1
-        });
+    .header {
+        min-height: 70px;
+        height: 70px;
+        padding: 0 5%;
     }
 
-    saveCart();
-    renderCart();
-
-}
-
-
-// Evento delegado: funciona mesmo após
-// os produtos serem recriados pelos filtros.
-
-if (productGrid) {
-
-    productGrid.addEventListener("click", event => {
-
-        const button = event.target.closest("[data-add]");
-
-        if (!button) return;
-
-        const productId = Number(button.dataset.add);
-
-        addToCart(productId);
-
-        const originalText = button.textContent;
-
-        button.textContent = "ADICIONADO ✓";
-
-        button.disabled = true;
-
-        setTimeout(() => {
-            button.textContent = originalText;
-            button.disabled = false;
-        }, 900);
-
-    });
-
-}
-
-
-
-/* -----------------------------------------
-   8. ATUALIZAR E REMOVER PRODUTOS DA SACOLA
-   ----------------------------------------- */
-
-function updateCartQuantity(productId, change) {
-
-    const item = cart.find(
-        item => item.id === productId
-    );
-
-    if (!item) return;
-
-    item.quantity += change;
-
-    // Remove o produto quando a quantidade chega a zero.
-    if (item.quantity <= 0) {
-        cart = cart.filter(
-            item => item.id !== productId
-        );
+    .logo img {
+        width: 132px;
+        height: 63px;
     }
 
-    saveCart();
-    renderCart();
-}
-
-
-function removeFromCart(productId) {
-
-    cart = cart.filter(
-        item => item.id !== productId
-    );
-
-    saveCart();
-    renderCart();
-
-}
-
-
-// Eventos dos controles da sacola.
-
-if (cartItemsContainer) {
-
-    cartItemsContainer.addEventListener("click", event => {
-
-        const increaseButton = event.target.closest("[data-increase]");
-        const decreaseButton = event.target.closest("[data-decrease]");
-        const removeButton = event.target.closest("[data-remove]");
-
-        if (increaseButton) {
-            updateCartQuantity(
-                Number(increaseButton.dataset.increase),
-                1
-            );
-            return;
-        }
-
-        if (decreaseButton) {
-            updateCartQuantity(
-                Number(decreaseButton.dataset.decrease),
-                -1
-            );
-            return;
-        }
-
-        if (removeButton) {
-            removeFromCart(
-                Number(removeButton.dataset.remove)
-            );
-        }
-
-    });
-
-}
-
-
-/* -----------------------------------------
-   9. ATUALIZAR A SACOLA
-   ----------------------------------------- */
-
-function renderCart() {
-
-    if (!cartItemsContainer) return;
-
-    let total = 0;
-    let totalQuantity = 0;
-
-
-    if (cart.length === 0) {
-
-        cartItemsContainer.innerHTML = `
-            <p class="empty-cart">
-                Sua sacola está vazia.
-            </p>
-        `;
-
-    } else {
-
-        cartItemsContainer.innerHTML = cart.map(item => {
-
-            const product = products.find(
-                product => product.id === item.id
-            );
-
-            if (!product) return "";
-
-            const subtotal = product.price * item.quantity;
-
-            total += subtotal;
-            totalQuantity += item.quantity;
-
-            return `
-
-                <div class="cart-item">
-
-                    <div class="cart-item-info">
-
-                        <strong>${product.name}</strong>
-
-                        <p>
-                            ${formatPrice(product.price)} por unidade
-                        </p>
-
-                        <strong>
-                            ${formatPrice(subtotal)}
-                        </strong>
-
-                    </div>
-
-                    <div class="cart-item-actions">
-
-                        <div class="quantity-controls">
-
-                            <button
-                                type="button"
-                                class="cart-quantity-button"
-                                data-decrease="${product.id}"
-                                aria-label="Diminuir quantidade de ${product.name}"
-                            >
-                                −
-                            </button>
-
-                            <span class="cart-quantity">
-                                ${item.quantity}
-                            </span>
-
-                            <button
-                                type="button"
-                                class="cart-quantity-button"
-                                data-increase="${product.id}"
-                                aria-label="Aumentar quantidade de ${product.name}"
-                            >
-                                +
-                            </button>
-
-                        </div>
-
-                        <button
-                            type="button"
-                            class="cart-remove-button"
-                            data-remove="${product.id}"
-                            aria-label="Remover ${product.name} da sacola"
-                        >
-                            REMOVER
-                        </button>
-
-                    </div>
-
-                </div>
-
-            `;
-
-        }).join("");
-
+    .header-actions {
+        gap: 10px;
     }
 
-
-    // Atualiza quantidade total.
-
-    if (cartCountElement) {
-        cartCountElement.textContent = totalQuantity;
+    .navigation {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        padding: 25px 7%;
+        background: var(--cream);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 22px;
+        border-bottom: 2px solid var(--forest);
+        box-shadow: 0 12px 20px rgba(37, 39, 34, 0.08);
     }
 
+    .navigation a {
+        font-size: 14px;
+        padding: 5px 0;
+    }
 
-    // Atualiza subtotal.
+    .navigation.open {
+        display: flex;
+    }
 
-    if (cartTotalElement) {
-        cartTotalElement.textContent = formatPrice(total);
+    .menu-button {
+        display: block;
+    }
+
+    .cart-button {
+        padding: 11px 12px;
+        font-size: 9px;
+    }
+
+    .hero {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-content {
+        padding: 80px 7% 40px;
+    }
+
+    .hero h1 {
+        font-size: 70px;
+    }
+
+    .hero-footer {
+        margin-top: 45px;
+    }
+
+    .hero-art {
+        min-height: 400px;
+    }
+
+    .art-circle {
+        width: 300px;
+        height: 300px;
+    }
+
+    .bag-illustration {
+        width: 220px;
+        height: 230px;
+    }
+
+    .products-section {
+        padding: 75px 6%;
+    }
+
+    .section-heading {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 25px;
+    }
+
+    .section-heading h2,
+    .about-content h2 {
+        font-size: 52px;
+    }
+
+    .product-filters {
+        gap: 8px;
+    }
+
+    .filter-button {
+        padding: 10px 12px;
+        font-size: 8px;
+    }
+
+    #product-search {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 15px;
+    }
+
+    .product-image {
+        height: 210px;
+    }
+
+    .product-image .product-shape {
+        font-size: 45px;
+    }
+
+    .product-info h3 {
+        font-size: 13px;
+    }
+
+    .about-section {
+        grid-template-columns: 1fr;
+    }
+
+    .about-image {
+        min-height: 350px;
+    }
+
+    .about-content {
+        padding: 75px 8%;
+    }
+
+    .newsletter {
+        padding: 80px 7%;
+    }
+
+    .newsletter h2 {
+        letter-spacing: -2px;
+    }
+
+    .footer {
+        padding: 45px 7% 22px;
+    }
+
+    .footer-main {
+        flex-direction: column;
+        gap: 40px;
+        padding-bottom: 35px;
+    }
+
+    .footer-links {
+        width: 100%;
+        justify-content: space-between;
+        gap: 25px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 12px;
     }
 
 }
 
+@media (max-width: 380px) {
 
-/* -----------------------------------------
-   10. ABRIR E FECHAR A SACOLA
-   ----------------------------------------- */
-
-function openCart() {
-
-    if (!cartOverlay) return;
-
-    cartOverlay.classList.add("open");
-
-    document.body.style.overflow = "hidden";
-
-}
-
-
-function closeCart() {
-
-    if (!cartOverlay) return;
-
-    cartOverlay.classList.remove("open");
-
-    document.body.style.overflow = "";
-
-}
-
-
-if (openCartButton) {
-    openCartButton.addEventListener("click", openCart);
-}
-
-
-if (closeCartButton) {
-    closeCartButton.addEventListener("click", closeCart);
-}
-
-
-// Fecha ao clicar fora do painel.
-
-if (cartOverlay) {
-
-    cartOverlay.addEventListener("click", event => {
-
-        if (event.target === cartOverlay) {
-            closeCart();
-        }
-
-    });
-
-}
-
-
-// Fecha com a tecla ESC.
-
-document.addEventListener("keydown", event => {
-
-    if (event.key === "Escape") {
-        closeCart();
-        closeMobileMenu();
+    .hero h1 {
+        font-size: 58px;
     }
 
-});
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
 
+    .product-image {
+        height: 280px;
+    }
 
-/* -----------------------------------------
-   11. MENU MOBILE
-   ----------------------------------------- */
+    .header {
+        padding: 0 4%;
+    }
 
-function closeMobileMenu() {
+    .logo img {
+        width: 116px;
+        height: 56px;
+    }
 
-    if (!navigation || !menuButton) return;
+    .header-actions {
+        gap: 8px;
+    }
 
-    navigation.classList.remove("open");
+    .cart-button {
+        padding: 10px;
+        font-size: 8px;
+    }
 
-    menuButton.setAttribute(
-        "aria-expanded",
-        "false"
-    );
+    .footer-links {
+        gap: 18px;
+    }
 
-    menuButton.setAttribute(
-        "aria-label",
-        "Abrir menu"
-    );
+    .footer-column a {
+        font-size: 11px;
+    }
 
-    menuButton.textContent = "☰";
+}
+
+/* =========================================
+   VIVERO — CONTROLES DE QUANTIDADE DA SACOLA
+   ========================================= */
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.cart-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.cart-item-info p {
+    margin: 0;
+    font-size: 13px;
+    color: #777;
+}
+
+.cart-item-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    border: 1px solid var(--olive);
+    padding: 5px 9px;
+    border-radius: 3px;
+}
+
+.cart-quantity-button {
+    background: transparent;
+    border: none;
+    color: var(--forest);
+    font-size: 20px;
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.cart-quantity-button:hover {
+    color: var(--terracotta);
+}
+
+.cart-quantity {
+    min-width: 18px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.cart-remove-button {
+    background: transparent;
+    border: none;
+    color: var(--terracotta);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.cart-remove-button:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 380px) {
+
+    .cart-item {
+        gap: 10px;
+    }
+
+    .quantity-controls {
+        gap: 7px;
+    }
+
+}
+
+/* =========================================
+   VIVERO — NOVO VISUAL DO CATÁLOGO
+   ========================================= */
+
+.product-card {
+    background: var(--cream);
+    border: 1px solid rgba(37, 39, 34, 0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 30px rgba(37, 39, 34, 0.10);
+}
+
+.product-image {
+    position: relative;
+    min-height: 290px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: var(--product-color);
+}
+
+.product-index {
+    position: absolute;
+    top: 17px;
+    left: 18px;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--cream);
+}
+
+.product-image-caption {
+    position: absolute;
+    right: 17px;
+    bottom: 15px;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--cream);
+}
+
+.product-visual {
+    position: relative;
+    width: 170px;
+    height: 175px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(12px 17px 10px rgba(0, 0, 0, 0.18));
+    transition: transform 0.35s ease;
+}
+
+.product-card:hover .product-visual {
+    transform: rotate(-4deg) scale(1.05);
+}
+
+/* Bolsas */
+
+.product-visual--bag .product-body {
+    position: absolute;
+    width: 145px;
+    height: 125px;
+    top: 45px;
+    background: var(--cream);
+    border: 3px solid var(--graphite);
+    border-radius: 10px 10px 25px 25px;
+    clip-path: polygon(8% 0, 92% 0, 100% 100%, 0 100%);
+}
+
+.product-visual--bag .product-handle {
+    position: absolute;
+    z-index: 2;
+    top: 5px;
+    width: 65px;
+    height: 65px;
+    border: 11px solid var(--graphite);
+    border-bottom: none;
+    border-radius: 45px 45px 0 0;
+}
+
+/* Organizadores e nécessaires */
+
+.product-visual--pouch .product-body {
+    position: absolute;
+    width: 150px;
+    height: 105px;
+    top: 52px;
+    background: var(--cream);
+    border: 3px solid var(--graphite);
+    border-radius: 15px 15px 22px 22px;
+}
+
+.product-visual--pouch .product-body::before {
+    content: "";
+    position: absolute;
+    top: 13px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--terracotta);
+}
+
+.product-visual--pouch .product-handle {
+    position: absolute;
+    z-index: 2;
+    top: 47px;
+    width: 155px;
+    height: 8px;
+    background: var(--graphite);
+    border-radius: 5px;
+}
+
+/* Informações dos produtos */
+
+.product-info {
+    padding: 20px;
+}
+
+.product-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.product-reference {
+    font-size: 10px;
+    color: #888;
+    letter-spacing: 1px;
+}
+
+.product-info h3 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 20px;
+    margin: 0 0 20px;
+    color: var(--graphite);
+}
+
+.product-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.product-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--forest);
+}
+
+.add-to-cart {
+    width: 100%;
+    min-height: 44px;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.add-to-cart:hover {
+    background: var(--terracotta);
+    color: var(--white);
+}
+
+.add-to-cart:disabled {
+    opacity: 0.7;
+    cursor: default;
+}
+
+@media (max-width: 700px) {
+
+    .product-image {
+        min-height: 230px;
+    }
+
+    .product-visual {
+        transform: scale(0.85);
+    }
+
+    .product-info {
+        padding: 15px;
+    }
+
+    .product-info h3 {
+        font-size: 17px;
+    }
 
 }
 
 
-if (menuButton && navigation) {
-
-    menuButton.setAttribute("aria-expanded", "false");
-
-    menuButton.addEventListener("click", () => {
-
-        const isOpen = navigation.classList.toggle("open");
-
-        menuButton.setAttribute(
-            "aria-expanded",
-            String(isOpen)
-        );
-
-        menuButton.setAttribute(
-            "aria-label",
-            isOpen ? "Fechar menu" : "Abrir menu"
-        );
-
-        menuButton.textContent = isOpen ? "✕" : "☰";
-
-    });
 
 
-    // Fecha o menu após clicar em um link.
-
-    navigation.querySelectorAll("a").forEach(link => {
-
-        link.addEventListener("click", closeMobileMenu);
-
-    });
-
-}
 
 
-/* -----------------------------------------
-   12. NEWSLETTER
-   ----------------------------------------- */
 
-if (newsletterForm) {
-
-    newsletterForm.addEventListener("submit", event => {
-
-        event.preventDefault();
-
-        const emailInput = newsletterForm.querySelector(
-            'input[type="email"]'
-        );
-
-        if (!emailInput || !emailInput.checkValidity()) {
-            return;
-        }
-
-        newsletterMessage.textContent =
-            "Obrigado! Sua inscrição foi registrada nesta demonstração.";
-
-        newsletterMessage.style.color = "#344D3B";
-
-        newsletterForm.reset();
-
-    });
-
-}
-
-
-/* -----------------------------------------
-   13. FINALIZAÇÃO DA COMPRA
-   ----------------------------------------- */
-
-if (checkoutButton) {
-
-    checkoutButton.addEventListener("click", () => {
-
-        if (cart.length === 0) {
-
-            alert("Sua sacola está vazia!");
-
-            return;
-
-        }
-
-        alert(
-            "A VIVERO ainda está preparando seu checkout! " +
-            "A integração de pagamento será adicionada em uma próxima etapa."
-        );
-
-    });
-
-}
-
-
-/* -----------------------------------------
-   14. INICIALIZAÇÃO DO SITE
-   ----------------------------------------- */
-
-renderProducts();
-
-renderCart();
-
-console.log("VIVERO: site inicializado com sucesso!");
