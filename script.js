@@ -352,9 +352,32 @@ if (productGrid) {
 }
 
 
+
 /* -----------------------------------------
-   8. REMOVER PRODUTOS DA SACOLA
+   8. ATUALIZAR E REMOVER PRODUTOS DA SACOLA
    ----------------------------------------- */
+
+function updateCartQuantity(productId, change) {
+
+    const item = cart.find(
+        item => item.id === productId
+    );
+
+    if (!item) return;
+
+    item.quantity += change;
+
+    // Remove o produto quando a quantidade chega a zero.
+    if (item.quantity <= 0) {
+        cart = cart.filter(
+            item => item.id !== productId
+        );
+    }
+
+    saveCart();
+    renderCart();
+}
+
 
 function removeFromCart(productId) {
 
@@ -368,17 +391,37 @@ function removeFromCart(productId) {
 }
 
 
+// Eventos dos controles da sacola.
+
 if (cartItemsContainer) {
 
     cartItemsContainer.addEventListener("click", event => {
 
-        const button = event.target.closest("[data-remove]");
+        const increaseButton = event.target.closest("[data-increase]");
+        const decreaseButton = event.target.closest("[data-decrease]");
+        const removeButton = event.target.closest("[data-remove]");
 
-        if (!button) return;
+        if (increaseButton) {
+            updateCartQuantity(
+                Number(increaseButton.dataset.increase),
+                1
+            );
+            return;
+        }
 
-        const productId = Number(button.dataset.remove);
+        if (decreaseButton) {
+            updateCartQuantity(
+                Number(decreaseButton.dataset.decrease),
+                -1
+            );
+            return;
+        }
 
-        removeFromCart(productId);
+        if (removeButton) {
+            removeFromCart(
+                Number(removeButton.dataset.remove)
+            );
+        }
 
     });
 
@@ -424,25 +467,58 @@ function renderCart() {
 
                 <div class="cart-item">
 
-                    <div>
+                    <div class="cart-item-info">
+
                         <strong>${product.name}</strong>
 
                         <p>
-                            ${item.quantity} × ${formatPrice(product.price)}
+                            ${formatPrice(product.price)} por unidade
                         </p>
 
                         <strong>
                             ${formatPrice(subtotal)}
                         </strong>
+
                     </div>
 
-                    <button
-                        type="button"
-                        data-remove="${product.id}"
-                        aria-label="Remover ${product.name} da sacola"
-                    >
-                        REMOVER
-                    </button>
+                    <div class="cart-item-actions">
+
+                        <div class="quantity-controls">
+
+                            <button
+                                type="button"
+                                class="cart-quantity-button"
+                                data-decrease="${product.id}"
+                                aria-label="Diminuir quantidade de ${product.name}"
+                            >
+                                −
+                            </button>
+
+                            <span class="cart-quantity">
+                                ${item.quantity}
+                            </span>
+
+                            <button
+                                type="button"
+                                class="cart-quantity-button"
+                                data-increase="${product.id}"
+                                aria-label="Aumentar quantidade de ${product.name}"
+                            >
+                                +
+                            </button>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            class="cart-remove-button"
+                            data-remove="${product.id}"
+                            aria-label="Remover ${product.name} da sacola"
+                        >
+                            REMOVER
+                        </button>
+
+                    </div>
 
                 </div>
 
