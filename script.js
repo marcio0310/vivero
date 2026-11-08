@@ -106,25 +106,60 @@ function loadCart() {
             return [];
         }
 
-        return savedCart
-            .filter(item =>
-                products.some(product => product.id === item.id) &&
-                Number.isInteger(item.quantity) &&
-                item.quantity > 0
+        const validatedCart = [];
+
+        savedCart.forEach(item => {
+            const product = products.find(
+                product => product.id === Number(item.id)
             );
 
+            const quantity = Number(item.quantity);
+
+            if (
+                product &&
+                Number.isInteger(quantity) &&
+                quantity > 0
+            ) {
+                const existing = validatedCart.find(
+                    entry => entry.id === product.id
+                );
+
+                if (existing) {
+                    existing.quantity += quantity;
+                } else {
+                    validatedCart.push({
+                        id: product.id,
+                        quantity
+                    });
+                }
+            }
+        });
+
+        return validatedCart;
+
     } catch (error) {
-        console.warn("Não foi possível recuperar a sacola:", error);
+        console.warn(
+            "Não foi possível recuperar a sacola:",
+            error
+        );
+
         return [];
     }
 }
 
 
 function saveCart() {
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(cart)
-    );
+    try {
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(cart)
+        );
+    } catch (error) {
+        console.warn(
+            "Não foi possível salvar a sacola:",
+            error
+        );
+    }
 }
 
 
@@ -507,9 +542,17 @@ function closeMobileMenu() {
 
     navigation.classList.remove("open");
 
-    menuButton.setAttribute("aria-expanded", "false");
+    menuButton.setAttribute(
+        "aria-expanded",
+        "false"
+    );
 
-    menuButton.setAttribute("aria-label", "Abrir menu");
+    menuButton.setAttribute(
+        "aria-label",
+        "Abrir menu"
+    );
+
+    menuButton.textContent = "☰";
 
 }
 
