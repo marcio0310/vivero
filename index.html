@@ -38,11 +38,22 @@
         </nav>
 
         <div class="header-actions">
-            <button class="cart-button" id="open-cart">
+            <button
+                class="cart-button"
+                id="open-cart"
+                type="button"
+                aria-label="Abrir sacola de compras"
+            >           
                 SACOLA (<span id="cart-count">0</span>)
             </button>
 
-            <button class="menu-button" id="menu-button" aria-label="Abrir menu">
+            <button
+                class="menu-button"
+                id="menu-button"
+                type="button"
+                aria-label="Abrir menu"
+                aria-expanded="false"
+            >
                 ☰
             </button>
         </div>
@@ -209,6 +220,7 @@
                 <input
                     type="email"
                     placeholder="Seu melhor e-mail"
+                    aria-label="Digite seu endereço de e-mail"
                     required
                 >
 
