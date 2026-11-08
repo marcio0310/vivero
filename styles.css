@@ -1101,6 +1101,98 @@ button {
 
 }
 
+/* =========================================
+   VIVERO — CONTROLES DE QUANTIDADE DA SACOLA
+   ========================================= */
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.cart-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.cart-item-info p {
+    margin: 0;
+    font-size: 13px;
+    color: #777;
+}
+
+.cart-item-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    border: 1px solid var(--olive);
+    padding: 5px 9px;
+    border-radius: 3px;
+}
+
+.cart-quantity-button {
+    background: transparent;
+    border: none;
+    color: var(--forest);
+    font-size: 20px;
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.cart-quantity-button:hover {
+    color: var(--terracotta);
+}
+
+.cart-quantity {
+    min-width: 18px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.cart-remove-button {
+    background: transparent;
+    border: none;
+    color: var(--terracotta);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.cart-remove-button:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 380px) {
+
+    .cart-item {
+        gap: 10px;
+    }
+
+    .quantity-controls {
+        gap: 7px;
+    }
+
+}
+
+
 
 
 
