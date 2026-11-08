@@ -19,7 +19,7 @@ const products = [
         categoryLabel: "BOLSA",
         price: 149.90,
         color: "#858B52",
-        shape: "H"
+        visual: "bag"
     },
     {
         id: 2,
@@ -28,7 +28,7 @@ const products = [
         categoryLabel: "BOLSA",
         price: 129.90,
         color: "#C66B4E",
-        shape: "T"
+        visual: "bag"
     },
     {
         id: 3,
@@ -37,7 +37,7 @@ const products = [
         categoryLabel: "ORGANIZADOR",
         price: 69.90,
         color: "#344D3B",
-        shape: "R"
+        visual: "pouch"
     },
     {
         id: 4,
@@ -46,7 +46,7 @@ const products = [
         categoryLabel: "NÉCESSAIRE",
         price: 59.90,
         color: "#D9A441",
-        shape: "C"
+        visual: "pouch"
     }
 ];
 
@@ -198,47 +198,63 @@ function renderProducts() {
     }
 
 
+    
     productGrid.innerHTML = filteredProducts.map(product => `
 
         <article class="product-card">
 
             <div
                 class="product-image"
-                style="background-color: ${product.color};"
+                style="--product-color: ${product.color};"
             >
 
-                <div
-                    class="product-shape"
-                    style="
-                        background-color: ${product.color};
-                        border: 4px solid rgba(37,39,34,0.8);
-                        border-radius: 12px 12px 35px 35px;
-                        box-shadow: 12px 15px 20px rgba(0,0,0,0.15);
-                    "
-                >
-                    ${product.shape}
+                <span class="product-index">
+                    0${product.id}
+                </span>
+
+                <div class="product-visual product-visual--${product.visual}">
+
+                    <span class="product-handle"></span>
+                    <span class="product-body"></span>
+
                 </div>
+
+                <span class="product-image-caption">
+                    VIVERO OBJECTS
+                </span>
 
             </div>
 
             <div class="product-info">
 
-                <span class="product-category">
-                    ${product.categoryLabel}
-                </span>
+                <div class="product-heading">
+
+                    <span class="product-category">
+                        ${product.categoryLabel}
+                    </span>
+
+                    <span class="product-reference">
+                        00${product.id}
+                    </span>
+
+                </div>
 
                 <h3>${product.name}</h3>
 
-                <p class="product-price">
-                    ${formatPrice(product.price)}
-                </p>
+                <div class="product-bottom">
 
-                <button
-                    class="add-to-cart"
-                    data-add="${product.id}"
-                >
-                    ADICIONAR À SACOLA +
-                </button>
+                    <p class="product-price">
+                        ${formatPrice(product.price)}
+                    </p>
+
+                    <button
+                        class="add-to-cart"
+                        data-add="${product.id}"
+                    >
+                        ADICIONAR À SACOLA +
+                    </button>
+
+                </div>
 
             </div>
 
